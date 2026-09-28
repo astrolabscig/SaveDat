@@ -13,24 +13,30 @@ public class SaveDat {
         boolean allDirectories = true;
 
         for (String argument : args) {
-            Path path = Path.of(argument);
-            String verdict = "";
-            
-            if (Files.exists(path)) {
-                if (Files.isDirectory(path)){
-                    verdict = "directory"; 
+            String verdict = "error";
+            try {
+                Path path = Path.of(argument);
+                
+                if (Files.exists(path)) {
+                    if (Files.isDirectory(path)){
+                        verdict = "directory"; 
+                    } else {
+                        verdict = "not a directory";
+                        allDirectories = false;
+                    }
+                }else if (Files.notExists(path)) {
+                    verdict = "does not exist";
+                    allDirectories = false;
                 } else {
-                    verdict = "not a directory";
+                    verdict = "unknown";
                     allDirectories = false;
                 }
-            }else if (Files.notExists(path)) {
-                verdict = "does not exist";
-                allDirectories = false;
-            } else {
-                verdict = "unknown";
+                System.out.println(argument + ": [ " + verdict + " ]");
+
+            } catch ( java.nio.file.InvalidPathException e) {
+                System.out.println(argument + ":  [ invalid path: " + e.getMessage() + " ]");
                 allDirectories = false;
             }
-            System.out.println(argument + " >>>> " + verdict);
         }
         if (allDirectories) {
             System.exit(0);
