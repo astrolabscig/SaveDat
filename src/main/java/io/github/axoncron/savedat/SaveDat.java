@@ -23,8 +23,11 @@ public class SaveDat {
                     verdict = "not a directory";
                     allDirectories = false;
                 }
-            }else {
+            }else if (Files.notExists(path)) {
                 verdict = "does not exist";
+                allDirectories = false;
+            } else {
+                verdict = "unknown";
                 allDirectories = false;
             }
             System.out.println(argument + " >>>> " + verdict);
